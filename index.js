@@ -19,7 +19,8 @@ const parseStocko = async () => {
                     $ = cheerio.load(html)
                   
                     $(html).find('.product__col').each((index, element) => {
-                         console.log('Name: ' + $(element).find('.product .product__text-box a.product__title').text(), '\n' + 'LINK: ' + $(element).find('.product .product__text-box a.product__title').attr('href'), '\n\n' + "ID: " + idCounter + '\n\n')
+                         console.log('Name: ' + $(element).find('.product .product__text-box a.product__title').text(), '\n' + 'LINK: ' + $(element).find('.product .product__text-box a.product__title').attr('href'), '\n\n' + "ID: " + idCounter  + '\n\n' + 
+                         "----------------------------------------------------------------------------------------------------------------")
                         let item = {
                             name: $(element).find('.product .product__text-box a.product__title').text().replace(/\s+/g, ''),
                             link: $(element).find('.product .product__text-box a.product__title').attr('href'),
