@@ -1,26 +1,28 @@
 const fs = require('fs')
 const axios = require('axios')
 const cheerio = require('cheerio')
-let link = 'https://stocko.pro/search?page='
+
+const link = 'https://stocko.pro/search?page='
+const pages = 4
 
 const parseStocko = async () => {
     try {
         let arr = []
-        let i = 1
+        let pageCounter = 1
         let idCounter = 1
 
-        while(i < 4) {
-            await axios.get(link + i)
+        while(pageCounter < pages) {
+            await axios.get(link + pageCounter)
                 .then(res => res.data)
                 .then(res => {
                     let html = res
                     $ = cheerio.load(html)
                   
-                    $(html).find('.product__row').each((index, element) => {
-                        // console.log('>>>>>', $(element).find('.product .product__text-box a.product__title').text())
+                    $(html).find('.product__col').each((index, element) => {
+                         console.log('Name: ' + $(element).find('.product .product__text-box a.product__title').text(), '\n' + 'LINK: ' + $(element).find('.product .product__text-box a.product__title').attr('href'), '\n\n' + "ID: " + idCounter + '\n\n')
                         let item = {
-                            name: $(element).find('.product .product__text-box a.product__title').text().replace(/\s+/g, ''), //output full page names but not one by one
-                            link: $(element).find('.product .product__text-box a.product__title').attr('href'), //output only one link for first item but not for all
+                            name: $(element).find('.product .product__text-box a.product__title').text().replace(/\s+/g, ''),
+                            link: $(element).find('.product .product__text-box a.product__title').attr('href'),
                             id: idCounter
                         }
                         arr.push(item)
@@ -34,7 +36,7 @@ const parseStocko = async () => {
                 console.log('Saved stocko json successfully');
             })
 
-            i++
+            pageCounter++
         }
         
     } catch(e) {
